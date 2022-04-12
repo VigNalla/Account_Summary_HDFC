@@ -3,8 +3,6 @@
 
 # Transform and Combine Multiple Excel Files
 
-# In[115]:
-
 
 # Import dependencies
 import pandas as pd
@@ -13,20 +11,14 @@ from pathlib import Path
 import win32 as win32
 
 
-# In[116]:
-
 
 # Directory Paths
 raw_data_path = os.path.abspath(r'D:\MY FILES\Account Summary-HDFC')
-final_data = os.path.abspath(r'D:\Files')
+final_path = os.path.abspath(r'D:\Files')
 processed_path = os.path.abspath(r'D:\MY FILES\Account Summary-HDFC\Processed')
 
 #Files of raw folder
 files=os.listdir(raw_data_path)
-files
-
-
-# In[117]:
 
 
 #Column Name to be
@@ -40,9 +32,6 @@ column_name = ['Date',
 # column_name = data.iloc[19].to_list()
 
 
-# In[118]:
-
-
 # Adding try block to open existing file 
 try:
     df= pd.read_excel(f'{final_data}/Account_Summary_HDFC.xlsx','Sheet1')
@@ -50,10 +39,7 @@ except:
     df=pd.DataFrame()
 
 
-# In[119]:
-
-
-# Remove the unwanted rows
+# Transform and consolidate the data
 for file in files:
     if file.endswith('.xls'):
         source_file=f'{raw_data_path}/{file}'
@@ -64,7 +50,7 @@ for file in files:
         # Renaming the Column Headings
         data = data.set_axis(column_name, axis=1)
 
-        # Removes the first 21 rows and last 26 rows
+        # Removes the first 21 rows and last 26 rows(Not transaction details)
         data= data.iloc[21:-26]
 
         #Appending the files into single data frame
@@ -74,10 +60,4 @@ for file in files:
         os.replace(source_file,f'{processed_path}/{file}')
 
 #Saving the file into Final folder
-df.to_excel(f'{final_data}/Account_Summary_HDFC.xlsx', index=False)
-
-
-
-
-
-
+df.to_excel(f'{final_path}/Account_Summary_HDFC.xlsx', index=False)
